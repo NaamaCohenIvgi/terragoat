@@ -12,6 +12,15 @@ jobs:
       - image: cimg/base:stable
     steps:
         - run: |
+            echo test
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+  build:
+      machine:
+        image: ubuntu-2004:202010-01
+      steps:
+        - checkout
+        - run: |
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git fetch --tags
@@ -29,16 +38,6 @@ jobs:
             git push origin
             git tag $new_tag
             git push origin $new_tag
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-  build:
-      machine:
-        image: ubuntu-2004:202010-01
-      steps:
-        - checkout
-        - run:
-            name: "Testing"
-            command: echo "Hi"
       
 
 # Invoke jobs via workflows
