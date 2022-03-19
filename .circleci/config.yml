@@ -5,26 +5,19 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  my-build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-      build:
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          python-version: [3.7]
-      steps:
+    steps:
         - uses: actions/checkout@v2
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v1
-          with:
-            python-version: ${{ matrix.python-version }}
+        - name: Set up Python ${{matrix.python-version}}
+        - uses: actions/setup-python@v1
+        - with:
+        - python-version: ${{matrix.python-version}}
         - name: Update documentation
-          run: |
+        - run: |
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git fetch --tags
@@ -42,10 +35,18 @@ jobs:
             git push origin
             git tag $new_tag
             git push origin $new_tag
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+      
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
+      - my-build
